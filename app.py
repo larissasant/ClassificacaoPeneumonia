@@ -1,14 +1,11 @@
 from PIL.Image import Image
 from flask import Flask, render_template, request
-from keras.backend import batch_dot
 from keras.models import load_model
 from keras.preprocessing import image
 
 import numpy as np
 
 app = Flask(__name__)
-
-#dic = {0 : 'normal', 1 : 'pneumonia'}
 
 model = load_model('model.h5')
 
@@ -22,15 +19,8 @@ def predict_label(img_path):
 	images = np.vstack([i])
 	p = model.predict(images, batch_size = 10)
 
-	print("classe", p[0])
+	return p[0]
 	
-	if p[0] > 0.5:
-		print('Pneumonia')
-		return p[0]
-	else:
-		print('Normal')
-		return p[0]
-
 
 # routes
 @app.route("/", methods=['GET', 'POST'])
@@ -51,10 +41,13 @@ def get_output():
 
 		p = predict_label(img_path)
 
-		print("teste", img_path)
-		print("teste2", p)
+		if p == [1]:
+			p = "Pneumonia"
+			print('pneumonia')
+		if p == [0]:
+			p = "Normal"
 
-	return render_template("index.html", pred = p, img_path = img_path)
+	return render_template("index.html", p = p, img_path = img_path)
 
 
 if __name__ =='__main__':
