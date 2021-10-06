@@ -29,17 +29,11 @@
     </div>
   </form>
 
-	{% if pred %}
+      {% if p %}
   <img src="{{img_path}}" height="400px" width="400px">
-	<h2> Predição   : 
-    <i>
-      {{pred}}
-    </i>
+      <h2> Predição : <i> {{p}} </i> </h2>
+      {% endif %}
       
-  </h2>
-
-	{% endif %}
-
 </div>
 
 </body>
